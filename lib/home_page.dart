@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:news/ApiServices.dart';
+import 'package:news/newsarticle.dart';
 
 import 'models.dart';
 
@@ -13,6 +15,15 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   ApiServices apiServices = ApiServices();
   List<Article>? article;
+
+  // List of news categories
+  List<String> categories = [
+    'General',
+    'Business',
+    'Sports',
+    'Health',
+    'Technology'
+  ];
 
   @override
   void initState() {
@@ -41,7 +52,29 @@ class _HomeState extends State<Home> {
         centerTitle: true,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          // Horizontal ListView of news categories
+          Container(
+            height: 50, // Adjust the height as needed
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Implement your logic for handling category selection
+                      print('Selected category: ${categories[index]}');
+                    },
+                    child: Text(categories[index],style:GoogleFonts.roboto(color:Colors.white),),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height:30),
           Expanded(
             child: ListView.builder(
               itemBuilder: (context, index) {
@@ -57,17 +90,53 @@ class _HomeState extends State<Home> {
                 var publishedAt = x.publishedAt;
                 var content = x.content;
 
-                return ListTile(
-                  title: Text(title),
-                  subtitle: Text(description),
-                  trailing: Text('Author: ${author ?? ''}'),
-                  onTap: () {
-                    // Handle tap on article item
-                    // You can navigate to a detailed view or do something else here
-                  },
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
+                  child: ExpansionTile(
+                    title: Text(
+                      title,
+                      style: GoogleFonts.rubik(fontSize: 20),
+                    ),
+                    children: [
+                      Container(
+                        width: 400,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade900,
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Image.network(urlToImage!),
+                      ),
+                      const SizedBox(height:15),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              description,
+                              style: GoogleFonts.rubik(fontSize: 15),
+                            ),
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NewsArticle(
+                                            urlLink: url,
+                                            dateTime: publishedAt,
+                                          )));
+                            },
+                            child: const Text("Read post"),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               },
-              itemCount: article?.length ?? 0, // Use the null-coalescing operator to handle a null article list.
+              itemCount: article?.length ?? 0,
             ),
           ),
         ],
