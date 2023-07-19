@@ -40,6 +40,7 @@ dependencies:
   http: ^0.13.6
   google_fonts: ^4.0.4
   url_launcher: ^6.1.11
+  shimmer: ^3.0.0
 
 
 dev_dependencies:

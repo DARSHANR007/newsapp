@@ -22,7 +22,7 @@ class _NewsCategoriesState extends State<NewsCategories> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 50, // You can adjust the height as needed
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
