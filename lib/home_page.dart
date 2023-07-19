@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:news/ApiServices.dart';
+import 'package:news/categories.dart';
+import 'package:news/category_newsAPI.dart';
 import 'package:news/newsarticle.dart';
 
 import 'models.dart';
@@ -14,10 +16,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   ApiServices apiServices = ApiServices();
+  CategoryNews categoryNews = CategoryNews();
   List<Article>? article;
 
   // List of news categories
-  List<String> categories = [
+  List<String> newsCategories = [
     'General',
     'Business',
     'Sports',
@@ -54,27 +57,10 @@ class _HomeState extends State<Home> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          NewsCategories(),
           // Horizontal ListView of news categories
-          Container(
-            height: 50, // Adjust the height as needed
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Implement your logic for handling category selection
-                      print('Selected category: ${categories[index]}');
-                    },
-                    child: Text(categories[index],style:GoogleFonts.roboto(color:Colors.white),),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height:30),
+
+          const SizedBox(height: 30),
           Expanded(
             child: ListView.builder(
               itemBuilder: (context, index) {
@@ -109,7 +95,7 @@ class _HomeState extends State<Home> {
                         ),
                         child: Image.network(urlToImage!),
                       ),
-                      const SizedBox(height:15),
+                      const SizedBox(height: 15),
                       Row(
                         children: [
                           Expanded(
